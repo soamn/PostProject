@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    .main {
+        @apply max-w-7xl mx-auto bg-gray-50 p-6 rounded-lg shadow-md; /* Added some padding, border radius, and shadow for better styling */
+    }
+
+    .btn {
+        @apply  shadow rounded-md px-2 py-2 mx-2; 
+    }
+}
+
+
+.odd {
+    background-color: #f7fafc; /* Using Tailwind's default colors */
+}
+
+.even {
+    background-color: #edf2f7; /* Using Tailwind's default colors */
+}
+
+
+.odd:hover, .even:hover {
+    background-color: #e2e8f0; 
+}
