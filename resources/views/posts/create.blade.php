@@ -17,44 +17,11 @@
                 <div>
                     <x-input-label for="description" value="Description" />
                 
-                    <textarea id="description" name="description" class="block mt-1 w-full" rows="5" >{{ old('description') }}</textarea>
+                    <textarea id="description" name="description" >{{ old('description') }}</textarea>
                     @error('description')
                         <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
-
-                <div class="grid grid-cols-2 gap-6">
-                    <div>
-                        <x-input-label for="image" value="Image" />
-                        <div class="relative">
-                            <input type="file" id="image" name="image"
-                                class="block w-full opacity-0 cursor-pointer absolute inset-0" accept="image/*"
-                                onchange="previewImage(event)" />
-                            <label for="image"
-                                class="block mt-1 w-full p-2 text-center bg-gray-100 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                Choose File
-                            </label>
-                        </div>
-                        <div class="mt-4">
-                            <img id="imagePreview" src="#" alt="Image Preview"
-                                class="w-32 h-32 object-cover rounded-lg hidden">
-                        </div>
-                        @error('image')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <x-input-label for="url" value="URL" />
-                        <x-text-input id="url" name="url" type="url"
-                            class="block mt-1 w-full p-2"
-                            value="{{ old('url') }}" required />
-                        @error('url')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
                 <div class="mt-6 flex w-full justify-center">
                     <x-primary-button >Save Post</x-primary-button>
                 </div>
@@ -69,28 +36,17 @@
         let editorInstance;
 
         ClassicEditor
-            .create(document.querySelector('#description'), {
-                toolbar: [
-                    'bold',               
-                    'italic',                       
-                    'blockQuote',        
-                    'link',                             
-                    'undo',              
-                    'redo',                 
-                    '|',                  
-                    'heading',           
-               
-                ],
-                heading: {
-                    options: [
-                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
-                    ]
-                }
+            .create(document.querySelector('#description'),{
+                ckfinder: {
+                uploadUrl: '{{route('posts.upload').'?_token='.csrf_token()}}',
+
+            },
             })
+            
             .then(editor => {
                 editorInstance = editor;
+                editor.ui.view.editable.element.style.height = "300px"; 
+                
             })
             .catch(error => {
                 console.error(error);

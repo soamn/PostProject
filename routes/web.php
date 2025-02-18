@@ -10,6 +10,11 @@ Route::get('/', function () {
 
 Route::resource('posts', PostController::class)
 ->middleware(['auth', 'verified']);
+//posts upload
+Route::post('posts/upload',[PostController::class,'upload'])
+->middleware(['auth', 'verified'])->name('posts.upload');
+
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

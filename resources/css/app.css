@@ -25,3 +25,69 @@
 .odd:hover, .even:hover {
     background-color: #e2e8f0; 
 }
+
+.ck-editor__editable {
+    height: 300px !important; /* Force height */
+    min-height: 300px;
+    overflow-y: auto;
+}
+
+/* General Styling */
+table.dataTable tbody tr {
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+}
+
+/* Hover Effect */
+table.dataTable tbody tr:hover {
+    background-color: #e8f4ff;
+}
+
+/* Styling for Post Slug */
+.post-slug {
+    color: blue;
+    font-size: smaller;
+}
+
+/* Styling for Post Description */
+.post-description {
+    color: green;
+    font-size: smaller;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;  /* Ensures long words break properly */
+    overflow-wrap: break-word; /* Helps break text correctly */
+    display: block; /* Ensures proper block-level rendering */
+    max-width: 100%; /* Prevents overflowing */
+    line-height: 1.4; /* Improves readability */
+}
+
+
+/* Styling for Published Date */
+.published-date {
+    font-style: italic;
+    font-size: 13px;
+}
+
+/* Buttons */
+.edit-btn {
+    color: #007bff;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.edit-btn:hover {
+    color: #0056b3;
+}
+
+.delete-btn {
+    color: red;
+    font-size: 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    color: darkred;
+}
