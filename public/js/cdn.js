@@ -27,14 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (post.error) {
         postContainer.innerHTML = `<p>${post.error}</p>`;
       } else {
-        const postTitle = document.createElement('h2');
-        postTitle.classList.add('post-title');
-        postTitle.textContent = post.title ?? "No post";
-        postContainer.appendChild(postTitle);
-
+        if(post.title){
+          const postTitle = document.createElement('h2');
+          postTitle.classList.add('post-title');
+          postTitle.textContent = post.title ?? "No post";
+          postContainer.appendChild(postTitle);
+        }
         const postDescription = document.createElement('div');
         postDescription.classList.add('post-description');
-        postDescription.innerHTML = post.description ?? "Thanks for viewing";
+        postDescription.innerHTML = post.description ?? "No Post Thanks for viewing";
         postContainer.appendChild(postDescription);
 
         const postDate = document.createElement('span');

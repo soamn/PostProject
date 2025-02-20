@@ -18,7 +18,7 @@ class PostController extends Controller
         $posts = Post::query();     
         if (request()->ajax()) {
             return DataTables::of($posts)
-                ->addIndexColumn() // Adds an index column (if needed)
+                ->addIndexColumn() 
                 ->addColumn('actions', function ($row) {
                     return '
                         <a href="' . route('posts.edit', $row->id) . '" class="btn edit-btn" id="edit-' . $row->id . '">
@@ -36,6 +36,9 @@ class PostController extends Controller
                 ->addColumn('published_at', function ($row) {
                     return '<p class="published-date" id="published-' . $row->id . '">' . Carbon::parse($row->published_at)->format('M d, Y') . '</p>';
                 })
+                ->addColumn('title', function ($row) {
+                    return $row->title??'<i>No Title</i>';
+                })
                 ->addColumn('description', function ($row) {
                     $description = Str::limit($row->description, 100);
                     return '<div class="post-description" id="description-' . $row->id . '">' . nl2br(e($description)) . '..</div>';
@@ -46,7 +49,7 @@ class PostController extends Controller
                 ->orderColumn('published_at', function ($query, $order) {
                     $query->orderBy('published_at', $order);
                 })
-                ->rawColumns(['actions', 'description', 'slug', 'published_at'])
+                ->rawColumns(['actions','title', 'description', 'slug', 'published_at' ])
                 ->make(true);
         }
         return redirect('/');
@@ -66,7 +69,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'required|string',
         ]);
 
@@ -103,7 +106,7 @@ $validated['description'] = str_replace('src="../', 'src="'.env('APP_URL').'/', 
     public function update(Request $request, Post $post)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'required|string',
             'published_at' => 'required|date',
         ]);

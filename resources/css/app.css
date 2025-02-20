@@ -51,6 +51,8 @@ table.dataTable tbody tr:hover {
 
 /* Styling for Post Description */
 .post-description {
+    height: 20px;
+    overflow-y: hidden;
     color: green;
     font-size: smaller;
     white-space: normal;

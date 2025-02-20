@@ -14,9 +14,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
+        $this->call(RoleSeeder::class);
+
         User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@netgen.in',
+            'role_id' => '1',
             'password'=>'password'
         ]);
     }

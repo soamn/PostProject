@@ -18,14 +18,17 @@
             @method('PUT')
 
             <div class="space-y-6">
-                <div>
-                    <x-input-label for="title" value="Title" />
-                    <x-text-input id="title" name="title" type="text" class="block mt-1 w-full p-2"
-                        value="{{ old('title', $post->title) }}" required autofocus />
-                    @error('title')
+                @if($post->title)
+
+                    <div>
+                        <x-input-label for="title" value="Title (Optional)"/>
+                        <x-text-input id="title" name="title" type="text" class="block mt-1 w-full p-2"
+                        value="{{ old('title', $post->title) }}"  autofocus placeholder="Enter title (Optional)"/>
+                        @error('title')
                         <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+                        @enderror
+                    </div>
+                @endif 
 
                 <div>
                     <x-input-label for="description" value="Description" />
