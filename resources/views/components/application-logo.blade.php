@@ -1,1 +1,1 @@
-<img src="/netgen-logo.png" {{$attributes}}>
+<img src="/OLB-logo-2020.png" {{$attributes}}>
