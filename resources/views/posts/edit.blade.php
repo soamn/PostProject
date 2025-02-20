@@ -1,7 +1,11 @@
 <x-app-layout>
     <section class="main">
-        <h1 class="text-2xl font-semibold mb-6">Edit Post</h1>
+        <div class="flex justify-between">
 
+            <h1 class="text-2xl font-semibold mb-6">Edit Post</h1>
+            <a href="{{ route('posts.history', $post->id) }}" class="text-yellow-500 hover:text-yellow-600"><i
+                    class="fa-solid fa-clock-rotate-left"></i> History</a>
+        </div>
         <!-- Display errors if any -->
         @if ($errors->any())
             <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
@@ -18,18 +22,32 @@
             @method('PUT')
 
             <div class="space-y-6">
-                @if($post->title)
-
-                    <div>
-                        <x-input-label for="title" value="Title (Optional)"/>
-                        <x-text-input id="title" name="title" type="text" class="block mt-1 w-full p-2"
-                        value="{{ old('title', $post->title) }}"  autofocus placeholder="Enter title (Optional)"/>
-                        @error('title')
+                <div>
+                    <x-input-label for="title" value="Title " />
+                    <x-text-input id="title" name="title" type="text" class="block mt-1 w-full p-2"
+                        value="{{ old('title', $post->title) }}" autofocus required />
+                    @error('title')
                         <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
+                    @enderror
+                </div>
+                <div>
+                    <x-input-label value="Show Title ? " />
+                    <div class="flex space-x-4 mt-1">
+                        <label class="flex items-center">
+                            <input type="radio" name="show_title" value="1"
+                                class="border-gray-300 text-blue-200 focus:ring-blue-500"
+                                {{ old('show_title', $post->show_title) == 1 ? 'checked' : '' }}>
+                            <span class="ml-2 text-gray-600">Show Title</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="show_title" value="0"
+                                class="border-gray-300 text-blue-200 focus:ring-blue-500"
+                                {{ old('show_title', $post->show_title) == 0 ? 'checked' : '' }}>
+                            <span class="ml-2 text-gray-600">Hide Title</span>
+                        </label>
                     </div>
-                @endif 
-
+                </div>
+                
                 <div>
                     <x-input-label for="description" value="Description" />
                     <textarea id="description" name="description">{{ old('description', $post->description) }}</textarea>
@@ -42,8 +60,8 @@
                     <x-input-label for="published_at" value="Published Date" />
                     <x-text-input id="published_at" name="published_at" type="datetime-local"
                         class="block mt-1 w-full p-2"
-                        value="{{ old('published_at', optional($post->published_at)->format('Y-m-d\TH:i')) }}"
-                        required />
+                        value="{{ $post->published_at ? $post->published_at->format('Y-m-d\TH:i') : '' }}" required />
+
                     @error('published_at')
                         <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -52,11 +70,10 @@
                 <div class="relative">
                     <x-input-label for="template" value="Template" />
 
-                    <textarea rows="3"
-                        class="w-full p-3 border resize-none border-gray-300 rounded-md bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    <textarea rows="3" class="w-full p-3 border resize-none border-gray-300 rounded-md bg-gray-100 text-gray-700"
                         id="template" disabled readonly>
-                        <div id="pc-{{ $post->slug }}" class="post-container"></div>
-                        <script src="{{ env('APP_URL') }}/js/cdn.js?id={{ $post->slug }}"></script>
+                    <div id="pc-{{ $post->slug }}" class="post-container"></div>
+                    <script src="{{ env('APP_URL') }}/js/cdn.js?id={{ $post->slug }}"></script>
                     </textarea>
                     <button id="copy-button" type="button"
                         class="absolute top-5 right-2 p-1 text-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:text-black"
@@ -77,8 +94,10 @@
             tinymce.init({
                 selector: '#description',
                 plugins: '  lists link image charmap preview anchor code fullscreen insertdatetime media table code help wordcount',
-                toolbar: "undo redo| blocks | bold italic underline code | align numlist bullist | link image codesample | table  | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor | ltr rtl",         
+                toolbar: "undo redo| blocks | bold italic underline code | align numlist bullist | link image codesample | table  | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor | ltr rtl",
                 height: 400,
+                menubar: false,
+                branding: false,
                 images_upload_handler: async (blobInfo) => {
                     try {
                         const formData = new FormData();
@@ -91,9 +110,9 @@
                                     .getAttribute('content')
                             }
                         });
-    
+
                         if (!response.ok) throw new Error(`Upload failed: ${response.statusText}`);
-    
+
                         const data = await response.json();
                         if (!data.url) throw new Error('Server did not return a URL');
                         return data.url;
@@ -103,11 +122,11 @@
                     }
                 }
             });
-    
+
             document.getElementById('postForm').addEventListener('submit', function(e) {
                 document.querySelector('#description').value = tinymce.get('description').getContent();
             });
-    
+
             document.getElementById('copy-button').addEventListener('click', function(event) {
                 event.preventDefault();
                 var textarea = document.getElementById('template');

@@ -1,7 +1,7 @@
 
 var postId;
-const appurl="http://127.0.0.1:8000";
-(function() {
+const appurl = "http://127.0.0.1:8000";
+(function () {
   const script = document.currentScript;
   if (script) {
     const urlParams = new URLSearchParams(new URL(script.src).search);
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (post.error) {
         postContainer.innerHTML = `<p>${post.error}</p>`;
       } else {
-        if(post.title){
+        if (post.show_title) {
           const postTitle = document.createElement('h2');
           postTitle.classList.add('post-title');
           postTitle.textContent = post.title ?? "No post";

@@ -4,7 +4,7 @@
 
 @layer base {
     .main {
-        @apply max-w-7xl mx-auto bg-gray-50 p-6 rounded-lg shadow-md; /* Added some padding, border radius, and shadow for better styling */
+        @apply max-w-7xl mx-auto bg-gray-50 p-6 rounded-lg shadow-md ; /* Added some padding, border radius, and shadow for better styling */
     }
 
     .btn {

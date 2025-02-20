@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -15,7 +16,11 @@ Route::resource('posts', PostController::class)
 Route::post('posts/upload',[PostController::class,'upload'])
 ->middleware(['auth', 'verified'])->name('posts.upload');
 
+Route::get('posts/{id}/history',[HistoryController::class,'index'])
+->middleware(['auth', 'verified'])->name('posts.history');
 
+Route::get('/posts/{id}/rollback',[HistoryController::class,'rollback'])
+->name('history.rollback');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

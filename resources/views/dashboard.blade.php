@@ -9,7 +9,7 @@
                 Create New Post
             </a>
         </div>
-        <div class="  ring-1 ring-black p-4 rounded-lg lg:min-w-[1000px] ">
+        <div class="  ring-1 ring-black p-4 rounded-lg ">
             <table id="postsTable" class=" divide-y divide-gray-200 ">
                 <thead class="">
                     <tr>
@@ -34,9 +34,7 @@
         </div>
     </section>
 
-    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+   
 
     <script type="text/javascript">
         $(document).ready(function() {

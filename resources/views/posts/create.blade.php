@@ -5,9 +5,9 @@
             @csrf
             <div class="space-y-6">
                 <div>
-                    <x-input-label for="title" value="Title (Optional)" />
+                    <x-input-label for="title" value="Title " />
                     <x-text-input id="title" name="title" type="text" class="block mt-1 w-full p-2"
-                    value="{{ old('title') }}" autofocus placeholder="Enter title (Optional)" />
+                    value="{{ old('title') }}" autofocus required />
                     @error('title')
                         <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
