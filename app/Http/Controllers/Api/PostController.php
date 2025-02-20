@@ -11,7 +11,6 @@ class PostController extends Controller
     {
         $posts = Post:: 
         orderBy('published_at', 'desc');
-        dd($posts);
         return response()->json($posts);
     }
 

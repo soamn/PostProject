@@ -69,6 +69,8 @@ class PostController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
         ]);
+
+$validated['description'] = str_replace('src="../', 'src="'.env('APP_URL').'/', $validated['description']);
         Post::create([
             'title' => $validated['title'],
             'description' => $validated['description'],
@@ -105,6 +107,7 @@ class PostController extends Controller
             'description' => 'required|string',
             'published_at' => 'required|date',
         ]);
+        $validated['description'] = str_replace('src="../', 'src="'.env('APP_URL').'/', $validated['description']);
         $post->update([
             'title' => $validated['title'],
             'description' => $validated['description'],
@@ -126,29 +129,24 @@ class PostController extends Controller
     {
         // Validate the uploaded file
         $request->validate([
-            'upload' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|',
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
-    
-        if ($request->hasFile('upload')) {
-            // Get file info
-            $file = $request->file('upload');
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
             $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $extension = $file->getClientOriginalExtension();
-    
-            $fileName = $fileName . '_' . time() . '.' . $extension;
-    
-            $file->move(public_path('temp'), $fileName);
-    
-            $url = asset('temp/' . $fileName);
-    
+            $uniqueFileName = $fileName . '_' . time() . '.' . $extension;
+            $path = $file->storeAs('uploads', $uniqueFileName, 'public');
+            $url = asset('storage/' . $path);
+            
             return response()->json([
-                'fileName' => $fileName,
-                'uploaded' => 1,
                 'url' => $url,
             ]);
         }
-    
+
         return response()->json(['error' => 'No file uploaded or file is invalid'], 400);
+
     }
     
 }

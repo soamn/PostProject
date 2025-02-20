@@ -1,6 +1,6 @@
 
 var postId;
-const appurl="http://127.0.0.1:8002";
+const appurl="http://127.0.0.1:8000";
 (function() {
   const script = document.currentScript;
   if (script) {

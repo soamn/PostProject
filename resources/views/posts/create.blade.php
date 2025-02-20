@@ -6,72 +6,59 @@
             <div class="space-y-6">
                 <div>
                     <x-input-label for="title" value="Title" />
-                    <x-text-input id="title" name="title" type="text"
-                        class="block mt-1 w-full p-2"
+                    <x-text-input id="title" name="title" type="text" class="block mt-1 w-full p-2"
                         value="{{ old('title') }}" required autofocus />
                     @error('title')
                         <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div>
+                <div class="pros">
                     <x-input-label for="description" value="Description" />
-                
-                    <textarea id="description" name="description" >{{ old('description') }}</textarea>
+
+                    <textarea id="description" name="description">{{ old('description') }}</textarea>
                     @error('description')
                         <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="mt-6 flex w-full justify-center">
-                    <x-primary-button >Save Post</x-primary-button>
+                    <x-primary-button>Save Post</x-primary-button>
                 </div>
             </div>
         </form>
     </section>
+    <x-slot:scripts>
+        
+        <script>
+            tinymce.init({
+                selector: '#description',
+                selector: '#description',
+                plugins: '  lists link image charmap preview anchor code fullscreen insertdatetime media table code help wordcount',
+                toolbar: "undo redo| blocks | bold italic underline code | align numlist bullist | link image codesample | table  | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor | ltr rtl",         
+                height: 400, 
+                menubar: false, 
+                branding: false, 
+                images_upload_handler: async (blobInfo, progress) => {
+                    try {
+                        const formData = new FormData();
+                        formData.append('file', blobInfo.blob(), blobInfo.filename());
 
-    <!-- CKEditor CDN -->
-    <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
-
-    <script>
-        let editorInstance;
-
-        ClassicEditor
-            .create(document.querySelector('#description'),{
-                ckfinder: {
-                uploadUrl: '{{route('posts.upload').'?_token='.csrf_token()}}',
-
-            },
-            })
-            
-            .then(editor => {
-                editorInstance = editor;
-                editor.ui.view.editable.element.style.height = "300px"; 
-                
-            })
-            .catch(error => {
-                console.error(error);
+                        const response = await fetch('/posts/upload', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        console.log(response);
+                        if (!response.ok) throw new Error('Upload failed');
+                        const data = await response.json();
+                        return data.url;
+                    } catch (error) {
+                        console.error('Image upload failed:', error);
+                        throw error;
+                    }
+                }
             });
+        </script>
 
-       
-        document.getElementById('postForm').addEventListener('submit', function(e) {
-            document.querySelector('#description').value = editorInstance.getData();
-        });
 
-        function previewImage(event) {
-            const imagePreview = document.getElementById('imagePreview');
-            const file = event.target.files[0];
-
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imagePreview.src = e.target.result;
-                    imagePreview.classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
-            } else {
-                imagePreview.classList.add('hidden');
-            }
-        }
-    </script>
-
+    </x-slot:scripts>
 </x-app-layout>
